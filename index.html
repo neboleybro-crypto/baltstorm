@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Балтийский Шторм — Регби на колясках</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&family=Kelly+Slab&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ========== ПЕРЕМЕННЫЕ И БАЗА ========== */
+:root{
+  --primary:#0c2340;--accent:#00a3e0;--accent-dark:#0088bb;
+  --light:#f8fafc;--white:#fff;--text:#1e293b;--text-muted:#64748b;
+  --radius:16px;--shadow:0 4px 6px -1px rgb(0 0 0/.1),0 2px 4px -2px rgb(0 0 0/.1);
+  --shadow-xl:0 20px 25px -5px rgb(0 0 0/.1),0 8px 10px -6px rgb(0 0 0/.1);
+  --transition:all .3s cubic-bezier(.4,0,.2,1);
+  --font-display:'Bebas Neue',sans-serif;--font-body:'Inter',sans-serif;
+  --font-hero:'Kelly Slab',cursive;
+  --font-header:'Montserrat',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);color:var(--text);line-height:1.6;background:var(--light);-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+img{max-width:100%;display:block}
+.container{width:100%;max-width:1280px;margin:0 auto;padding:0 24px}
+.section{padding:80px 0}
+.section__title{font-family:var(--font-display);font-size:3rem;letter-spacing:2px;text-align:center;color:var(--primary);margin-bottom:48px;position:relative}
+.section__title::after{content:'';display:block;width:80px;height:4px;background:var(--accent);margin:12px auto 0;border-radius:2px}
+.section__action{text-align:center;margin-top:48px}
+.page{display:none}
+.page.active{display:block}
+
+/* ========== КНОПКИ ========== */
+.btn{display:inline-block;padding:14px 36px;border-radius:50px;font-weight:600;font-size:1rem;transition:var(--transition);border:none;cursor:pointer;letter-spacing:.5px}
+.btn--primary{background:linear-gradient(135deg,var(--accent),#00c6ff);color:var(--white);box-shadow:0 4px 15px rgba(0,163,224,.4)}
+.btn--primary:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,163,224,.5)}
+.btn--outline{background:transparent;border:2px solid var(--accent);color:var(--accent)}
+.btn--outline:hover{background:var(--accent);color:var(--white);transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,163,224,.3)}
+
+/* ========== ШАПКА ========== */
+.header{position:fixed;top:0;left:0;width:100%;z-index:1000;background:rgba(12,35,64,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.1);padding:12px 0}
+.header__container{display:flex;justify-content:space-between;align-items:center}
+.header__logo{display:flex;align-items:center;gap:14px;color:var(--white)}
+.header__logo-img{height:44px;width:auto;filter:drop-shadow(0 0 10px rgba(0,163,224,.3));object-fit:contain}
+.header__logo-text{
+  font-family:var(--font-header);
+  font-weight:800;
+  font-size:1rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:#fff;
+  line-height:1.2;
+}
+.header__actions{display:flex;align-items:center;gap:20px}
+.header__menu{display:flex;gap:32px}
+.header__link{color:rgba(255,255,255,.8);font-weight:500;font-size:1rem;transition:var(--transition);padding:8px 0;position:relative}
+.header__link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--accent);transition:var(--transition)}
+.header__link:hover,.header__link.active{color:var(--white)}
+.header__link:hover::after,.header__link.active::after{width:100%}
+.header__vk{display:flex;align-items:center;transition:transform .3s}
+.header__vk:hover{transform:scale(1.12)}
+.header__vk img{width:36px;height:36px;display:block}
+.header__menu-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:5px}
+.header__menu-toggle span{display:block;width:28px;height:3px;background:var(--white);border-radius:3px;transition:var(--transition)}
+
+/* ========== HERO ========== */
+.hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--white);background:url('https://sun9-54.vkuserphoto.ru/s/v1/ig2/qYPmFUVyz1j1CWcHGOZLeYjSahQjUEA-1LqLu4X5E24XdrwqV3PS_oDr3RjA6ZAH2keUMEFlMRdMEL62cUPuNdAZ.jpg?quality=95&as=32x25,48x38,72x56,108x85,160x125,240x188,360x282,480x376,540x423,640x501,720x564,1080x846,1280x1003,1440x1128,2560x2006&from=bu&u=Oe0TnV68rPtxkwI_lLbrM9MXzxG2em4PCjtRkRy4QNQ&cs=2560x0') no-repeat center center/cover;overflow:hidden}
+.hero__overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(12,35,64,.85) 0%,rgba(12,35,64,.55) 100%);z-index:1}
+.hero__content{position:relative;z-index:2;max-width:960px;padding-top:80px}
+.hero__title{
+  font-family:var(--font-hero);
+  font-size:clamp(2.2rem,8vw,5rem);
+  line-height:1;
+  letter-spacing:1px;
+  margin-bottom:24px;
+  color:#4fc3f7;
+  text-shadow:
+    0 0 25px rgba(79,195,247,.55),
+    0 0 50px rgba(79,195,247,.35),
+    0 6px 24px rgba(0,0,0,.65);
+  text-transform:uppercase;
+  font-weight:400;
+}
+.hero__subtitle{font-size:clamp(1rem,2.5vw,1.4rem);font-weight:300;margin-bottom:40px;opacity:.9;letter-spacing:1px}
+.hero__wave{position:absolute;bottom:-1px;left:0;width:100%;z-index:2;line-height:0}
+.hero__wave svg{width:100%;height:auto;display:block}
+
+/* ========== НОВОСТИ (ГЛАВНАЯ) ========== */
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:32px}
+.news-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);display:flex;flex-direction:column;border:1px solid rgba(0,0,0,.03)}
+.news-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-xl)}
+.news-card__image{width:100%;height:220px;object-fit:cover;transition:transform .5s ease}
+.news-card:hover .news-card__image{transform:scale(1.05)}
+.news-card__content{padding:24px;display:flex;flex-direction:column;flex-grow:1}
+.news-card__date{font-size:.85rem;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.news-card__title{font-size:1.3rem;font-weight:700;margin-bottom:12px;color:var(--primary);line-height:1.3;flex-grow:1}
+.news-card__excerpt{font-size:.95rem;color:var(--text-muted);margin-bottom:20px;line-height:1.5}
+.news-card__link{font-weight:600;color:var(--accent);align-self:flex-start;transition:var(--transition);display:inline-flex;align-items:center;gap:6px}
+.news-card__link:hover{color:var(--accent-dark);gap:10px}
+
+/* ========== ГАЛЕРЕЯ ========== */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.gallery-item{overflow:hidden;border-radius:var(--radius);box-shadow:var(--shadow);position:relative;aspect-ratio:4/3;cursor:pointer;transition:var(--transition)}
+.gallery-item:hover{box-shadow:var(--shadow-xl)}
+.gallery-img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.gallery-item:hover .gallery-img{transform:scale(1.1)}
+.gallery-item::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(12,35,64,.4),transparent);opacity:0;transition:var(--transition);pointer-events:none}
+.gallery-item:hover::after{opacity:1}
+.gallery-item__zoom{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;opacity:0;transition:var(--transition);pointer-events:none}
+.gallery-item:hover .gallery-item__zoom{opacity:1}
+.gallery-item__zoom svg{width:28px;height:28px;fill:#fff;background:rgba(0,163,224,.9);padding:12px;border-radius:50%;box-sizing:content-box;box-shadow:0 4px 20px rgba(0,163,224,.5)}
+
+/* ========== ВИДЕО ========== */
+.videos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px}
+.video-item{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition)}
+.video-item:hover{box-shadow:var(--shadow-xl);transform:translateY(-4px)}
+.video-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000}
+.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+
+/* ========== LIGHTBOX ========== */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(5,15,30,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:3000;justify-content:center;align-items:center;padding:24px;opacity:0;transition:opacity .3s ease}
+.lightbox.active{display:flex;opacity:1}
+.lightbox__image{max-width:92vw;max-height:82vh;object-fit:contain;border-radius:12px;box-shadow:0 25px 70px rgba(0,0,0,.7);animation:lbZoomIn .35s cubic-bezier(.4,0,.2,1)}
+@keyframes lbZoomIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.lightbox__close{position:absolute;top:20px;right:24px;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:2rem;width:48px;height:48px;border-radius:50%;cursor:pointer;transition:var(--transition);line-height:1;display:flex;align-items:center;justify-content:center;z-index:5}
+.lightbox__close:hover{background:var(--accent);transform:rotate(90deg)}
+.lightbox__nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:none;color:#fff;font-size:2.2rem;width:56px;height:56px;border-radius:50%;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;z-index:5;line-height:1;padding-bottom:4px}
+.lightbox__nav:hover{background:var(--accent);transform:translateY(-50%) scale(1.1)}
+.lightbox__nav--prev{left:24px}
+.lightbox__nav--next{right:24px}
+.lightbox__counter{position:absolute;top:24px;left:24px;color:#fff;font-size:.9rem;font-weight:600;background:rgba(255,255,255,.1);padding:8px 16px;border-radius:30px;z-index:5}
+.lightbox__caption{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:#fff;font-size:1rem;background:rgba(0,0,0,.5);padding:10px 24px;border-radius:30px;text-align:center;max-width:90vw}
+
+/* ========== СТРАНИЦЫ ========== */
+.page-title{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);letter-spacing:3px;text-align:center;margin-bottom:40px;color:var(--primary);padding-top:100px}
+.about-text{max-width:800px;margin:0 auto 80px;text-align:center;font-size:1.1rem;color:var(--text-muted);line-height:1.8}
+.about-text p{margin-bottom:24px}
+
+/* ========== СТАТЬЯ ========== */
+.article-wrap{padding-top:120px;padding-bottom:80px}
+.article{max-width:860px;margin:0 auto;background:var(--white);border-radius:var(--radius);padding:48px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.03)}
+.article__back{display:inline-flex;align-items:center;gap:8px;color:var(--accent);font-weight:600;margin-bottom:28px;transition:var(--transition)}
+.article__back:hover{color:var(--accent-dark);gap:14px}
+.article__meta{display:flex;gap:16px;align-items:center;margin-bottom:16px;font-size:.9rem;color:var(--text-muted);flex-wrap:wrap}
+.article__category{background:rgba(0,163,224,.1);color:var(--accent);padding:6px 14px;border-radius:30px;font-weight:600;text-transform:uppercase;letter-spacing:1px;font-size:.75rem}
+.article__title{font-family:var(--font-display);font-size:clamp(2rem,4.5vw,3.2rem);letter-spacing:2px;line-height:1.15;color:var(--primary);margin-bottom:28px}
+.article__cover{width:100%;height:auto;max-height:520px;object-fit:cover;border-radius:var(--radius);margin-bottom:32px;box-shadow:var(--shadow)}
+.article__body p{margin-bottom:22px;font-size:1.05rem;line-height:1.85;color:var(--text)}
+.article__body p:first-child{font-size:1.15rem;font-weight:500;color:var(--primary)}
+.article__body h3{font-size:1.3rem;font-weight:700;color:var(--primary);margin:32px 0 16px}
+.article__body ul{margin:0 0 22px 24px;list-style:disc}
+.article__body li{margin-bottom:10px;line-height:1.7;color:var(--text)}
+.article__body blockquote{border-left:4px solid var(--accent);padding:16px 24px;margin:24px 0;background:var(--light);border-radius:8px;font-style:italic;color:var(--primary);font-size:1.05rem}
+.article__footer{margin-top:40px;padding-top:32px;border-top:1px solid rgba(0,0,0,.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.article__share{color:var(--text-muted);font-size:.9rem}
+.article__share a{color:var(--accent);font-weight:600}
+.article__not-found{text-align:center;padding:60px 20px}
+.article__not-found h2{font-family:var(--font-display);font-size:2.5rem;letter-spacing:2px;color:var(--primary);margin-bottom:16px}
+
+/* ========== СТРАНИЦА ИГРОКА ========== */
+.player-page-wrap{padding-top:120px;padding-bottom:80px}
+.player-page{max-width:800px;margin:0 auto;background:var(--white);border-radius:var(--radius);padding:48px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.03)}
+.player-page__back{display:inline-flex;align-items:center;gap:8px;color:var(--accent);font-weight:600;margin-bottom:28px;transition:var(--transition)}
+.player-page__back:hover{color:var(--accent-dark);gap:14px}
+.player-page__header{display:flex;gap:40px;align-items:center;margin-bottom:32px}
+.player-page__photo{width:200px;height:200px;border-radius:50%;object-fit:cover;border:5px solid var(--accent);box-shadow:0 0 40px rgba(0,163,224,.3);flex-shrink:0;background:#e2e8f0}
+.player-page__info h1{font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);letter-spacing:2px;color:var(--primary);margin-bottom:8px}
+.player-page__role{color:var(--accent);font-weight:600;font-size:1.1rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+.player-page__details{border-top:1px solid rgba(0,0,0,.08);padding-top:24px;display:flex;flex-direction:column;gap:16px}
+.player-page__details p{font-size:1.05rem;line-height:1.7}
+.player-page__details strong{color:var(--primary);font-weight:700}
+.player-page__not-found{text-align:center;padding:60px 20px}
+.player-page__not-found h2{font-family:var(--font-display);font-size:2.5rem;letter-spacing:2px;color:var(--primary);margin-bottom:16px}
+
+/* ========== ИГРОКИ ========== */
+.players-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:32px}
+.player-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:var(--transition);text-align:center;padding-bottom:24px;border:1px solid rgba(0,0,0,.03)}
+.player-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:var(--shadow-xl);border-color:var(--accent)}
+.player-card__photo{width:100%;height:260px;object-fit:cover;margin-bottom:20px;background:#e2e8f0}
+.player-card__name{font-size:1.3rem;font-weight:700;color:var(--primary);margin-bottom:6px;padding:0 12px}
+.player-card__role{font-size:.9rem;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:0 12px}
+
+/* ========== БЛОГ ========== */
+.news-list{display:flex;flex-direction:column;gap:32px;max-width:960px;margin:0 auto}
+.news-post{display:flex;background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);border:1px solid rgba(0,0,0,.03)}
+.news-post:hover{box-shadow:var(--shadow-xl);transform:translateY(-4px)}
+.news-post__image{width:320px;flex-shrink:0;object-fit:cover;transition:transform .5s ease}
+.news-post:hover .news-post__image{transform:scale(1.03)}
+.news-post__content{padding:32px;display:flex;flex-direction:column}
+.news-post__date{font-size:.85rem;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.news-post__title{font-size:1.5rem;font-weight:700;color:var(--primary);margin-bottom:14px;line-height:1.3}
+.news-post__excerpt{color:var(--text-muted);margin-bottom:20px;flex-grow:1;line-height:1.6}
+.news-post__link{font-weight:600;color:var(--accent);align-self:flex-start;transition:var(--transition);display:inline-flex;align-items:center;gap:6px}
+.news-post__link:hover{color:var(--accent-dark);gap:10px}
+
+/* ========== ПОДВАЛ ========== */
+.footer{background:var(--primary);color:rgba(255,255,255,.7);padding:40px 0;text-align:center;margin-top:40px}
+.footer__container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.footer__social{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+.footer__social span{color:rgba(255,255,255,.7)}
+.footer__vk{display:inline-flex;transition:transform .3s}
+.footer__vk:hover{transform:scale(1.1)}
+.footer__vk img{width:48px;height:48px;display:block}
+
+/* ========== АДАПТИВ ========== */
+@media(max-width:992px){
+  .news-post{flex-direction:column}
+  .news-post__image{width:100%;height:240px}
+  .article{padding:32px}
+  .player-page{padding:32px}
+  .player-page__header{flex-direction:column;text-align:center}
+  .player-page__photo{width:160px;height:160px}
+}
+@media(max-width:768px){
+  .section{padding:60px 0}
+  .section__title{font-size:2.2rem;margin-bottom:32px}
+  .hero{min-height:600px;background-position:center top}
+  .hero__title{font-size:clamp(2rem,7vw,3.5rem)}
+  .header__menu-toggle{display:flex}
+  .header__nav{position:absolute;top:100%;left:0;width:100%;background:rgba(12,35,64,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:20px 0;border-bottom:1px solid rgba(255,255,255,.1);transform:translateY(-100%);opacity:0;pointer-events:none;transition:var(--transition)}
+  .header__nav.open{transform:translateY(0);opacity:1;pointer-events:all}
+  .header__menu{flex-direction:column;align-items:center;gap:16px}
+  .header__link{font-size:1.1rem;padding:10px 0}
+  .header__logo-text{display:none}
+  .header__logo-img{height:40px}
+  .header__actions{gap:14px}
+  .header__vk img{width:32px;height:32px}
+  .page-title{padding-top:80px;font-size:2.5rem}
+  .footer__container{flex-direction:column;text-align:center}
+
+  .videos-grid{grid-template-columns:1fr;gap:20px}
+
+  .article-wrap{padding-top:90px;padding-bottom:50px}
+  .article{padding:24px;border-radius:12px}
+  .article__body p{font-size:1rem}
+  .article__body p:first-child{font-size:1.05rem}
+
+  .player-page-wrap{padding-top:90px;padding-bottom:50px}
+  .player-page{padding:24px;border-radius:12px}
+
+  .lightbox{padding:0}
+  .lightbox__nav{width:44px;height:44px;font-size:1.6rem}
+  .lightbox__nav--prev{left:8px}
+  .lightbox__nav--next{right:8px}
+  .lightbox__close{top:12px;right:12px;width:40px;height:40px;font-size:1.6rem}
+  .lightbox__counter{top:12px;left:12px;font-size:.8rem;padding:6px 12px}
+  .lightbox__caption{bottom:12px;font-size:.85rem;padding:8px 16px}
+  .lightbox__image{max-width:100vw;max-height:75vh;border-radius:0}
+}
+@media(max-width:480px){
+  .container{padding:0 16px}
+  .hero__title{font-size:clamp(1.8rem,8vw,2.5rem)}
+  .hero__subtitle{font-size:.95rem}
+  .news-grid,.players-grid,.gallery-grid{grid-template-columns:1fr}
+  .news-post__content{padding:20px}
+  .news-post__title{font-size:1.2rem}
+  .player-page__photo{width:120px;height:120px}
+  .footer__vk img{width:44px;height:44px}
+}
+</style>
+</head>
+<body>
+
+<!-- ========== ШАПКА ========== -->
+<header class="header">
+  <div class="container header__container">
+    <a href="#home" class="header__logo">
+      <img
+        src="./Логотип балтийский шторм.png"
+        onerror="this.onerror=null;this.src='https://i129.fastpic.org/big/2026/1021/e2/_6a31d015010634e81cbb491506b97de2.png';"
+        alt="Балтийский Шторм"
+        class="header__logo-img">
+      <span class="header__logo-text">Балтийский Шторм</span>
+    </a>
+    <div class="header__actions">
+      <nav class="header__nav" id="header-nav">
+        <ul class="header__menu">
+          <li><a href="#home" class="header__link">Главная</a></li>
+          <li><a href="#about" class="header__link">О команде</a></li>
+          <li><a href="#news" class="header__link">Блог</a></li>
+        </ul>
+      </nav>
+      <a href="https://vk.ru/club224639254" target="_blank" rel="noopener" class="header__vk" aria-label="Мы во ВКонтакте">
+        <img src="https://img.icons8.ru/3d-fluency/94/vk-circled.png" alt="VK">
+      </a>
+      <button class="header__menu-toggle" id="menu-toggle" aria-label="Открыть меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ГЛАВНАЯ -->
+  <section id="page-home" class="page active">
+    <div class="hero">
+      <div class="hero__overlay"></div>
+      <div class="hero__content container">
+        <h1 class="hero__title">Балтийский Шторм</h1>
+        <p class="hero__subtitle">Регби на колясках. Сила духа и воля к победе.</p>
+        <a href="#about" class="btn btn--primary">Узнать о команде</a>
+      </div>
+      <div class="hero__wave">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,64 C288,120 576,0 864,32 C1152,64 1440,96 1440,96 L1440,120 L0,120 Z" fill="#f8fafc"/></svg>
+      </div>
+    </div>
+
+    <section class="section latest-news">
+      <div class="container">
+        <h2 class="section__title">Последние новости</h2>
+        <div class="news-grid" id="latest-news-container"></div>
+        <div class="section__action"><a href="#news" class="btn btn--outline">Все новости</a></div>
+      </div>
+    </section>
+
+    <section class="section gallery">
+      <div class="container">
+        <h2 class="section__title">Фотогалерея</h2>
+        <div class="gallery-grid" id="gallery-grid">
+          <div class="gallery-item">
+            <img src="https://sun9-85.vkuserphoto.ru/s/v1/ig2/QGkJGEg_WiQyXIB7H2t5yPl7vcT2CXSi0nUCU-T5qGmKYl-XCQWyYhNWhp1ZF7hjGdODkBbKPX_a80Z0AQ_08zap.jpg?quality=95&as=32x21,48x32,72x48,108x72,160x107,240x160,360x240,480x320,540x360,640x426,720x480,1080x720,1280x853,1440x960,2560x1706&from=bu&cs=2560x0" alt="Матч «Балтийского Шторма»" class="gallery-img" loading="lazy">
+            <div class="gallery-item__zoom"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14zM7 9h2V7h1v2h2v1h-2v2H9v-2H7z"/></svg></div>
+          </div>
+          <div class="gallery-item">
+            <img src="https://sun9-50.vkuserphoto.ru/s/v1/ig2/d5VWu7o1kTn5rkCZAyzNuSRZR7ERAp2tTEkW7wvxGBsi9DfsgABYQH9AEzdVTl5wW-AV95tzZAaS_4ew68eaxC70.jpg?quality=95&as=32x21,48x32,72x48,108x72,160x106,240x160,360x239,480x319,540x359,640x426,720x479,1080x718,1280x851,1440x958,2560x1703&from=bu&cs=2560x0" alt="Команда на площадке" class="gallery-img" loading="lazy">
+            <div class="gallery-item__zoom"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14zM7 9h2V7h1v2h2v1h-2v2H9v-2H7z"/></svg></div>
+          </div>
+          <div class="gallery-item">
+            <img src="https://sun9-39.vkuserphoto.ru/s/v1/ig2/EPZEUgHoL1BiTlKEOVoNHg-gYMzX8GK22Dh33pPdpmiQ_-WurNhhJ6EkC5z32OJAOKmlJ9oqKkOvJC3oobgVL114.jpg?quality=95&as=32x21,48x32,72x48,108x72,160x107,240x160,360x240,480x320,540x360,640x427,720x480,1080x720,1280x853,1440x960,2560x1707&from=bu&u=jcWdIjvUiyPd0h0-Dm3isxLaEK9WiD8Md_PLEbCqnNs&cs=2560x0" alt="Тренировка команды" class="gallery-img" loading="lazy">
+            <div class="gallery-item__zoom"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14zM7 9h2V7h1v2h2v1h-2v2H9v-2H7z"/></svg></div>
+          </div>
+          <div class="gallery-item">
+            <img src="https://sun9-85.vkuserphoto.ru/s/v1/ig2/lgS-AkS-b8fbvXsloH4iIMvJhKN5gNbiwrCAX3dzaSJtouFZkR_y9zWtB0rDFdwiBR-GF8vY0qHCKMqqTLw_8pGy.jpg?quality=95&as=32x26,48x39,72x58,108x87,160x130,240x194,360x291,480x389,540x437,640x518,720x583,819x663&from=bu&u=rZ7LAiPJE0Ua9_pdsV7hUhR0VUKmEAyk03_1eDZVf_c&cs=819x0" alt="Игроки команды" class="gallery-img" loading="lazy">
+            <div class="gallery-item__zoom"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14zM7 9h2V7h1v2h2v1h-2v2H9v-2H7z"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ЗАПИСИ ИГР -->
+    <section class="section videos">
+      <div class="container">
+        <h2 class="section__title">НАШИ МАТЧИ</h2>
+        <div class="videos-grid">
+          <div class="video-item">
+            <div class="video-wrap">
+              <iframe src="https://vkvideo.ru/video_ext.php?oid=-236396880&id=456239284&hash=4af828b45019aad1&hd=4" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" allowfullscreen loading="lazy" title="Запись игры 1"></iframe>
+            </div>
+          </div>
+          <div class="video-item">
+            <div class="video-wrap">
+              <iframe src="https://vkvideo.ru/video_ext.php?oid=-236396880&id=456239287&hash=2d2d792b0946fdd5&hd=4" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" allowfullscreen loading="lazy" title="Запись игры 2"></iframe>
+            </div>
+          </div>
+          <div class="video-item">
+            <div class="video-wrap">
+              <iframe src="https://vkvideo.ru/video_ext.php?oid=-236396880&id=456239286&hash=0db5c7b440e03770&hd=4" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" allowfullscreen loading="lazy" title="Запись игры 3"></iframe>
+            </div>
+          </div>
+          <div class="video-item">
+            <div class="video-wrap">
+              <iframe src="https://vkvideo.ru/video_ext.php?oid=-236396880&id=456239285&hash=83110185e7ca5a91&hd=4" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" allowfullscreen loading="lazy" title="Запись игры 4"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- О КОМАНДЕ -->
+  <section id="page-about" class="page">
+    <div class="section">
+      <div class="container">
+        <h1 class="page-title">О команде</h1>
+        <div class="about-text">
+          <p>«Балтийский Шторм» — калининградская команда по регби на колясках, объединяющая сильных духом спортсменов. С 2025 года команда выступает под этим брендом на всероссийской арене, регулярно становясь призёром чемпионата России и демонстрируя высочайший уровень мастерства и командного духа.</p>
+          <p>Наши игроки — это люди с безграничной волей к победе, для которых регби стало не просто спортом, а образом жизни. Мы гордимся каждым членом нашей команды и приглашаем вас познакомиться с ними поближе.</p>
+        </div>
+        <h2 class="section__title">Состав команды</h2>
+        <div class="players-grid" id="players-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- БЛОГ -->
+  <section id="page-news" class="page">
+    <div class="section">
+      <div class="container">
+        <h1 class="page-title">Новости и блог</h1>
+        <div class="news-list" id="news-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- СТАТЬЯ -->
+  <section id="page-article" class="page">
+    <div class="article-wrap">
+      <div class="container">
+        <article class="article" id="article-container"></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- СТРАНИЦА ИГРОКА -->
+  <section id="page-player" class="page">
+    <div class="player-page-wrap">
+      <div class="container">
+        <article class="player-page" id="player-page-container"></article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox__close" id="lb-close" aria-label="Закрыть">&times;</button>
+  <span class="lightbox__counter" id="lb-counter">1 / 4</span>
+  <button class="lightbox__nav lightbox__nav--prev" id="lb-prev" aria-label="Предыдущее">‹</button>
+  <img class="lightbox__image" id="lb-image" src="" alt="">
+  <button class="lightbox__nav lightbox__nav--next" id="lb-next" aria-label="Следующее">›</button>
+  <span class="lightbox__caption" id="lb-caption"></span>
+</div>
+
+<!-- ПОДВАЛ -->
+<footer class="footer">
+  <div class="container footer__container">
+    <p>&copy; 2026 Регби-клуб «Балтийский Шторм». Все права защищены.</p>
+    <div class="footer__social">
+      <span>Мы в соцсетях:</span>
+      <a href="https://vk.ru/club224639254" target="_blank" rel="noopener" class="footer__vk" aria-label="ВКонтакте">
+        <img src="https://img.icons8.ru/3d-fluency/94/vk-circled.png" alt="VK">
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ========== ИГРОКИ ========== */
+const DEFAULT_PLAYER_PHOTO = 'https://i.postimg.cc/XvxG89cQ/user.jpg';
+
+const playersData=[
+  {id:1,name:'Владимир Воронович',role:'Нападающий',photo:DEFAULT_PLAYER_PHOTO,bio:'Опытный игрок, отличающийся силовой манерой игры и самоотдачей на площадке.',number:'8',achievements:'Бронзовый призёр чемпионата России'},
+  {id:2,name:'Сергей Елунин',role:'Защитник',photo:DEFAULT_PLAYER_PHOTO,bio:'Быстрый и маневренный спортсмен, отвечающий за надёжность обороны.',number:'5',achievements:'Бронзовый призёр чемпионата России'},
+  {id:3,name:'Илья Ишин',role:'Капитан команды',photo:DEFAULT_PLAYER_PHOTO,bio:'Лидер команды, ведёт за собой партнёров и задаёт темп игре.',number:'10',achievements:'Бронзовый призёр чемпионата России'},
+  {id:4,name:'Михаил Клейнов',role:'Нападающий',photo:DEFAULT_PLAYER_PHOTO,bio:'Мощный игрок, специализирующийся на силовой борьбе и захватах.',number:'12',achievements:'Бронзовый призёр чемпионата России'},
+  {id:5,name:'Анатолий Кравченко',role:'Защитник',photo:DEFAULT_PLAYER_PHOTO,bio:'Универсальный спортсмен, способный сыграть на любой позиции.',number:'7',achievements:'Бронзовый призёр чемпионата России'},
+  {id:6,name:'Дарья Суровцева',role:'Нападающий',photo:DEFAULT_PLAYER_PHOTO,bio:'Одна из самых ярких представительниц команды, сочетающая силу и скорость.',number:'9',achievements:'Бронзовый призёр чемпионата России'},
+  {id:7,name:'Дмитрий Фунтиков',role:'Защитник',photo:DEFAULT_PLAYER_PHOTO,bio:'Надёжный игрок обороны, отличающийся хладнокровием в решающие моменты.',number:'4',achievements:'Бронзовый призёр чемпионата России'},
+  {id:8,name:'Валерий Кривов',role:'Играющий тренер',photo:DEFAULT_PLAYER_PHOTO,bio:'Опытнейший спортсмен, совмещающий функции игрока и тренера. Один из лучших игроков страны.',number:'1',achievements:'Лучший игрок чемпионата России, бронзовый призёр'},
+  {id:9,name:'Андрей Леонхард',role:'Играющий тренер',photo:DEFAULT_PLAYER_PHOTO,bio:'Наставник и игрок команды, отвечающий за тактическую подготовку и мотивацию коллектива.',number:'3',achievements:'Бронзовый призёр чемпионата России'}
+];
+
+/* ========== НОВОСТИ ========== */
+const newsImage='https://sun9-71.vkuserphoto.ru/s/v1/ig2/-NSd_u60ZKImw9GQ9my-Ni7qV-Rhf_6r1dVAfccQvWms1d2BnDUNnpxS8CHjg-VSZIijSeEtdbFPxWB1rwsyFjpZ.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x959,1440x1079,2560x1919&from=bu&u=4SYkWa1KiVwVswH0hCA2gIBPbJEoM7Jg4gEn69ijlEw&cs=2560x0';
+
+const newsData=[
+  {
+    id:1,
+    title:'«Балтийский Шторм» в третий раз подряд взял бронзу круга чемпионата России',
+    date:'17 октября 2026',
+    image:newsImage,
+    excerpt:'Калининградская команда стабильно демонстрирует высокий результат, занимая третье место по итогам первого и второго кругов, а также финального этапа.',
+    content:`
+      <p>Калининградский регби-клуб «Балтийский Шторм» в третий раз подряд поднялся на третью ступень пьедестала по итогам очередного круга чемпионата России по регби на колясках. Стабильность результата подтверждает высокий уровень подготовки команды и её способность держать планку на протяжении всего сезона.</p>
+      <p>В напряжённой борьбе за медали «Балтийский Шторм» продемонстрировал слаженную командную игру, грамотную тактику и запредельную самоотдачу. Каждый матч турнира становился настоящим испытанием, и наши спортсмены достойно прошли его от начала и до конца.</p>
+      <h3>Ключевые моменты турнира</h3>
+      <ul>
+        <li>Уверенные победы в стартовых матчах круга;</li>
+        <li>Волевая победа в решающей игре с прямым конкурентом;</li>
+        <li>Надёжная игра в обороне на протяжении всех встреч;</li>
+        <li>Лидерские качества капитана и опытных игроков в концовках.</li>
+      </ul>
+      <blockquote>«Бронза в третий раз подряд — это не случайность, а закономерность. Мы доказали, что умеем держать удар и бороться до конца в любой ситуации. Спасибо ребятам за характер и веру в команду» — отметил играющий тренер Валерий Кривов.</blockquote>
+      <p>Команда не останавливается на достигнутом: впереди подготовка к следующим этапам соревнований, тренировочные сборы и работа над тактическими схемами. «Балтийский Шторм» продолжает набирать обороты и ставит перед собой самые амбициозные задачи.</p>
+      <p>Поздравляем игроков, тренерский штаб и всех болельщиков с очередным успехом! Вперёд, «Балтийский Шторм»!</p>
+    `
+  },
+  {
+    id:2,
+    title:'Калининград впервые принял чемпионат России по регби на колясках',
+    date:'19 октября 2026',
+    image:newsImage,
+    excerpt:'В «Автотор-Арене» прошли решающие матчи. «Балтийский Шторм» обыграл ШОР «Восток» (39:32) и сборную ДНР (52:24).',
+    content:`
+      <p>Калининград впервые в своей истории стал площадкой для проведения финальных матчей чемпионата России по регби на колясках. Решающие игры прошли в «Автотор-Арене» и собрали полные трибуны зрителей, пришедших поддержать спортсменов.</p>
+      <p>Хозяева турнира — «Балтийский Шторм» — не подвели своих болельщиков. В матче против ШОР «Восток» наши спортсмены одержали волевую победу со счётом 39:32, а во встрече со сборной ДНР уверенно переиграли соперника — 52:24.</p>
+      <h3>Результаты матчей</h3>
+      <ul>
+        <li>«Балтийский Шторм» — ШОР «Восток»: 39:32</li>
+        <li>«Балтийский Шторм» — сборная ДНР: 52:24</li>
+      </ul>
+      <p>Приём турнира такого уровня стал знаковым событием для всего региона. Калининград подтвердил готовность принимать крупные спортивные соревнования и создавать комфортные условия как для участников, так и для зрителей.</p>
+      <blockquote>«Для нас большая честь выступать дома, перед своими болельщиками. Поддержка трибун придавала сил в самые сложные моменты. Спасибо всем, кто пришёл и болел за нас!» — поделился впечатлениями капитан команды Илья Ишин.</blockquote>
+      <p>Организаторы отметили высокий уровень проведения соревнований, а также поблагодарили волонтёров и партнёров турнира. «Балтийский Шторм» доказал, что Калининград — это город, где регби на колясках по-настоящему любят и поддерживают.</p>
+    `
+  },
+  {
+    id:3,
+    title:'Игрок «Балтийского Шторма» Валерий Кривов вошёл в число лучших на чемпионате России',
+    date:'18 октября 2026',
+    image:newsImage,
+    excerpt:'Опытный спортсмен и играющий тренер был отмечен в числе лучших игроков турнира по классификационным баллам.',
+    content:`
+      <p>Играющий тренер «Балтийского Шторма» Валерий Кривов по итогам очередного круга чемпионата России вошёл в число лучших игроков турнира по классификационным баллам. Признание на всероссийском уровне стало заслуженной наградой за многолетний труд и высочайший уровень мастерства.</p>
+      <p>Валерий — один из самых опытных и титулованных игроков страны. Совмещая функции игрока и тренера, он является не только лидером на площадке, но и наставником для молодых спортсменов команды, передающим им свой опыт и знания.</p>
+      <h3>Достижения Валерия Кривова</h3>
+      <ul>
+        <li>Лучший игрок чемпионата России по регби на колясках;</li>
+        <li>Бронзовый призёр чемпионата России;</li>
+        <li>Играющий тренер «Балтийского Шторма»;</li>
+        <li>Один из самых результативных игроков команды.</li>
+      </ul>
+      <blockquote>«Быть в числе лучших — это большая ответственность. Но главное для меня — успехи команды, а не личные награды. Мы все движемся к общей цели и каждый вносит свой вклад» — подчеркнул Валерий Кривов.</blockquote>
+      <p>Руководство клуба и вся команда поздравляют Валерия с заслуженным признанием и желают новых спортивных успехов. Его пример показывает, что упорство, трудолюбие и вера в себя способны привести к самым высоким результатам.</p>
+    `
+  },
+  {
+    id:4,
+    title:'«Балтийский Шторм» завоевал Кубок России по снежному регби',
+    date:'2 февраля 2025',
+    image:newsImage,
+    excerpt:'Ещё одно важное достижение в копилке клуба. Команда продолжает расширять горизонты и пробовать новые дисциплины.',
+    content:`
+      <p>«Балтийский Шторм» продолжает пополнять свою коллекцию наград. На этот раз команда стала обладателем Кубка России по снежному регби — одной из самых молодых и зрелищных дисциплин, объединяющей элементы классического регби и соревнований на снегу.</p>
+      <p>Снежное регби — это динамичный и захватывающий вид спорта, требующий особой выносливости, координации и командного взаимодействия. Наши спортсмены достойно справились со всеми испытаниями и продемонстрировали слаженную игру на протяжении всего турнира.</p>
+      <h3>Путь к победе</h3>
+      <ul>
+        <li>Уверенные победы в групповом этапе;</li>
+        <li>Волевая победа в полуфинале;</li>
+        <li>Победа в финальном матче и завоевание Кубка.</li>
+      </ul>
+      <p>Этот трофей стал ещё одним подтверждением универсальности команды и её способности успешно выступать в разных дисциплинах. Клуб продолжает расширять горизонты и открывать для себя новые форматы соревнований.</p>
+      <blockquote>«Мы не боимся пробовать новое. Снежное регби подарило нам незабываемые эмоции и новый опыт. Кубок России — это здорово, но мы не собираемся останавливаться на достигнутом» — прокомментировал успех играющий тренер Андрей Леонхард.</blockquote>
+      <p>«Балтийский Шторм» благодарит всех болельщиков и партнёров за поддержку. Впереди — новые турниры, новые победы и новые вершины!</p>
+    `
+  }
+];
+
+/* ========== РЕНДЕР ИГРОКОВ ========== */
+function renderPlayers(){
+  const grid=document.getElementById('players-grid');
+  if(!grid)return;
+  grid.innerHTML=playersData.map(p=>`
+    <div class="player-card" data-id="${p.id}">
+      <img src="${p.photo}" alt="${p.name}" class="player-card__photo" loading="lazy">
+      <h3 class="player-card__name">${p.name}</h3>
+      <p class="player-card__role">${p.role}</p>
+    </div>`).join('');
+  grid.querySelectorAll('.player-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      window.location.hash = '#player/' + card.dataset.id;
+    });
+  });
+}
+
+/* ========== СТРАНИЦА ИГРОКА ========== */
+function renderPlayerPage(id){
+  const container=document.getElementById('player-page-container');
+  if(!container)return;
+
+  const p=playersData.find(x=>x.id===id);
+
+  if(!p){
+    container.innerHTML=`
+      <div class="player-page__not-found">
+        <h2>Игрок не найден</h2>
+        <p>Возможно, он был удалён или перемещён.</p>
+        <div class="section__action">
+          <a href="#about" class="btn btn--outline">← Все игроки</a>
+        </div>
+      </div>`;
+    document.title='Игрок не найден — Балтийский Шторм';
+    return;
+  }
+
+  container.innerHTML=`
+    <a href="#about" class="player-page__back">← Назад к команде</a>
+    <div class="player-page__header">
+      <img src="${p.photo}" alt="${p.name}" class="player-page__photo">
+      <div class="player-page__info">
+        <h1>${p.name}</h1>
+        <p class="player-page__role">${p.role}</p>
+      </div>
+    </div>
+    <div class="player-page__details">
+      <p><strong>Игровой номер:</strong> ${p.number||'—'}</p>
+      <p><strong>О игроке:</strong> ${p.bio}</p>
+      <p><strong>Достижения:</strong> ${p.achievements}</p>
+    </div>
+    <div class="section__action" style="margin-top:32px">
+      <a href="#about" class="btn btn--outline">← Все игроки</a>
+    </div>
+  `;
+
+  document.title=`${p.name} — Балтийский Шторм`;
+}
+
+/* ========== НОВОСТИ ========== */
+function renderLatestNews(){
+  const container=document.getElementById('latest-news-container');
+  if(!container)return;
+  container.innerHTML=newsData.slice(0,3).map(item=>`
+    <article class="news-card">
+      <img src="${item.image}" alt="${item.title}" class="news-card__image" loading="lazy">
+      <div class="news-card__content">
+        <span class="news-card__date">${item.date}</span>
+        <h3 class="news-card__title">${item.title}</h3>
+        <p class="news-card__excerpt">${item.excerpt}</p>
+        <a href="#article/${item.id}" class="news-card__link">Читать далее →</a>
+      </div>
+    </article>`).join('');
+}
+
+function renderAllNews(){
+  const container=document.getElementById('news-list');
+  if(!container)return;
+  container.innerHTML=newsData.map(item=>`
+    <article class="news-post">
+      <img src="${item.image}" alt="${item.title}" class="news-post__image" loading="lazy">
+      <div class="news-post__content">
+        <span class="news-post__date">${item.date}</span>
+        <h2 class="news-post__title">${item.title}</h2>
+        <p class="news-post__excerpt">${item.excerpt}</p>
+        <a href="#article/${item.id}" class="news-post__link">Читать полностью →</a>
+      </div>
+    </article>`).join('');
+}
+
+/* ========== СТАТЬЯ ========== */
+function renderArticle(id){
+  const container=document.getElementById('article-container');
+  if(!container)return;
+  const item=newsData.find(n=>n.id===id);
+  if(!item){
+    container.innerHTML=`
+      <div class="article__not-found">
+        <h2>Новость не найдена</h2>
+        <p>Возможно, она была удалена или перемещена.</p>
+        <div class="section__action"><a href="#news" class="btn btn--outline">← Все новости</a></div>
+      </div>`;
+    document.title='Новость не найдена — Балтийский Шторм';
+    return;
+  }
+  container.innerHTML=`
+    <a href="#news" class="article__back">← Назад к новостям</a>
+    <div class="article__meta">
+      <span class="article__category">Новости клуба</span>
+      <span>${item.date}</span>
+    </div>
+    <h1 class="article__title">${item.title}</h1>
+    <img src="${item.image}" alt="${item.title}" class="article__cover">
+    <div class="article__body">${item.content}</div>
+    <div class="article__footer">
+      <a href="#news" class="btn btn--outline">← Все новости</a>
+      <span class="article__share">Поделиться: <a href="https://vk.ru/club224639254" target="_blank" rel="noopener">ВКонтакте</a></span>
+    </div>`;
+  document.title=`${item.title} — Балтийский Шторм`;
+}
+
+/* ========== LIGHTBOX ========== */
+function setupLightbox(){
+  const items=document.querySelectorAll('.gallery-item');
+  const lb=document.getElementById('lightbox');
+  const lbImage=document.getElementById('lb-image');
+  const lbCaption=document.getElementById('lb-caption');
+  const lbCounter=document.getElementById('lb-counter');
+  if(!lb||!items.length)return;
+  let current=0;
+  function update(){
+    const img=items[current].querySelector('img');
+    lbImage.src=img.src;lbImage.alt=img.alt;
+    lbCaption.textContent=img.alt||'';
+    lbCounter.textContent=`${current+1} / ${items.length}`;
+  }
+  function open(index){current=index;update();lb.classList.add('active');document.body.style.overflow='hidden';}
+  function close(){lb.classList.remove('active');document.body.style.overflow='';}
+  function prev(){current=(current-1+items.length)%items.length;update();}
+  function next(){current=(current+1)%items.length;update();}
+  items.forEach((item,i)=>item.addEventListener('click',()=>open(i)));
+  document.getElementById('lb-close').addEventListener('click',close);
+  document.getElementById('lb-prev').addEventListener('click',e=>{e.stopPropagation();prev();});
+  document.getElementById('lb-next').addEventListener('click',e=>{e.stopPropagation();next();});
+  lb.addEventListener('click',e=>{if(e.target===lb)close();});
+  document.addEventListener('keydown',e=>{
+    if(!lb.classList.contains('active'))return;
+    if(e.key==='Escape')close();
+    else if(e.key==='ArrowLeft')prev();
+    else if(e.key==='ArrowRight')next();
+  });
+  let touchStartX=0;
+  lb.addEventListener('touchstart',e=>{touchStartX=e.changedTouches[0].screenX;},{passive:true});
+  lb.addEventListener('touchend',e=>{
+    const diff=e.changedTouches[0].screenX-touchStartX;
+    if(Math.abs(diff)>50){if(diff>0)prev();else next();}
+  },{passive:true});
+}
+
+/* ========== МОБИЛЬНОЕ МЕНЮ ========== */
+function setupMobileMenu(){
+  const toggle=document.getElementById('menu-toggle');
+  const nav=document.getElementById('header-nav');
+  if(!toggle||!nav)return;
+  toggle.addEventListener('click',()=>{nav.classList.toggle('open');toggle.classList.toggle('active');});
+  nav.querySelectorAll('.header__link').forEach(l=>l.addEventListener('click',()=>{nav.classList.remove('open');toggle.classList.remove('active');}));
+}
+
+/* ========== РОУТИНГ ========== */
+function showPage(){
+  const hash=(window.location.hash||'#home').replace(/^#/,'');
+  let pageId='home';let articleId=null;let playerId=null;
+
+  if(hash.startsWith('article/')){
+    pageId='article';
+    articleId=parseInt(hash.split('/')[1],10);
+  } else if(hash.startsWith('player/')){
+    pageId='player';
+    playerId=parseInt(hash.split('/')[1],10);
+  } else if(['home','about','news'].includes(hash)){
+    pageId=hash;
+  }
+
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+pageId));
+
+  const activeNav=pageId==='article'?'news':(pageId==='player'?'about':pageId);
+  document.querySelectorAll('.header__link').forEach(l=>{
+    l.classList.toggle('active',l.getAttribute('href')==='#'+activeNav);
+  });
+
+  if(pageId==='home')renderLatestNews();
+  if(pageId==='about')renderPlayers();
+  if(pageId==='news')renderAllNews();
+  if(pageId==='article')renderArticle(articleId);
+  if(pageId==='player')renderPlayerPage(playerId);
+
+  if(pageId==='home')document.title='Балтийский Шторм — Регби на колясках';
+  if(pageId==='about')document.title='О команде — Балтийский Шторм';
+  if(pageId==='news')document.title='Новости и блог — Балтийский Шторм';
+
+  const nav=document.getElementById('header-nav');
+  const toggle=document.getElementById('menu-toggle');
+  nav?.classList.remove('open');toggle?.classList.remove('active');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+window.addEventListener('hashchange',showPage);
+document.addEventListener('DOMContentLoaded',()=>{
+  showPage();
+  setupMobileMenu();
+  setupLightbox();
+});
+</script>
+</body>
+</html>
